@@ -13,6 +13,7 @@
     <button onclick="countClicks()">Click Me</button>
     <h1 id="clickCount">You clicked the button <span id="count">0</span> times</h1>
     <h2 id="cps">[CPS] Clicks/s: 0</h2>
+    <button onclick="resetCounter()">Reset</button>
 
     <script>
         let clickCount = 0;
@@ -29,6 +30,13 @@
             let elapsedSeconds = (currentTime - startTime) / 1000;
             let cps = clickCount / elapsedSeconds;
             document.getElementById("cps").innerHTML = "[CPS] Clicks/s: " + cps.toFixed(2);
+        }
+
+        function resetCounter() {
+            clickCount = 0;
+            startTime = Date.now();
+            document.getElementById("count").innerHTML = clickCount;
+            document.getElementById("cps").innerHTML = "[CPS] Clicks/s: 0";
         }
     </script>
 </body>
