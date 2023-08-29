@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Click Counter</title>
+    <style>
+        button {
+            background: linear-gradient(90deg, orange, yellow, orange);
+            /* Add any other button styles you want */
+        }
+    </style>
+</head>
+<body>
+    <button onclick="countClicks()">Click Me</button>
+    <h1 id="clickCount">You clicked the button <span id="count">0</span> times</h1>
+    <h2 id="cps">[CPS] Clicks/s: 0</h2>
+    <button onclick="resetCounter()">Reset</button>
+
+    <script>
+        let clickCount = 0;
+        let startTime = Date.now();
+        let cps = 0;
+
+        function countClicks() {
+            clickCount++;
+            document.getElementById("count").innerHTML = clickCount;
+        }
+
+        function updateCPS() {
+            let currentTime = Date.now();
+            let elapsedMilliseconds = currentTime - startTime;
+            let elapsedSeconds = elapsedMilliseconds / 1000;
+            cps = clickCount / elapsedSeconds;
+            document.getElementById("cps").innerHTML = "[CPS] Clicks/s: " + cps.toFixed(2);
+        }
+
+        setInterval(updateCPS, 100);
+
+        function resetCounter() {
+            clickCount = 0;
+            startTime = Date.now();
+            cps = 0;
+            document.getElementById("count").innerHTML = clickCount;
+            document.getElementById("cps").innerHTML = "[CPS] Clicks/s: " + cps.toFixed(2);
+        }
+    </script>
+</body>
+</html>
