@@ -14,15 +14,36 @@
     <h1 id="clickCount">You clicked the button <span id="count">0</span> times</h1>
     <h2 id="cps">[CPS] Clicks/s: 0</h2>
     <button onclick="resetCounter()">Reset</button>
+    
+    <!-- Add the changelog button -->
+    <button onclick="showChangelog()">Changelog</button>
 
     <script>
         let clickCount = 0;
         let startTime = Date.now();
         let cps = 0;
+        let lastClickTime = Date.now();
+        let autoclickDetected = false;
+        const timeThreshold = 100; // Time threshold for consecutive clicks (in milliseconds)
+        const consecutiveClickThreshold = 5; // Number of consecutive clicks required to detect autoclick
 
         function countClicks() {
-            clickCount++;
-            document.getElementById("count").innerHTML = clickCount;
+            let currentTime = Date.now();
+            let timeSinceLastClick = currentTime - lastClickTime;
+
+            if (timeSinceLastClick < timeThreshold) {
+                clickCount++;
+                document.getElementById("count").innerHTML = clickCount;
+                if (clickCount % consecutiveClickThreshold === 0) {
+                    autoclickDetected = true;
+                }
+            } else {
+                clickCount = 1;
+                document.getElementById("count").innerHTML = clickCount;
+                autoclickDetected = false;
+            }
+
+            lastClickTime = currentTime;
         }
 
         function updateCPS() {
@@ -31,6 +52,12 @@
             let elapsedSeconds = elapsedMilliseconds / 1000;
             cps = clickCount / elapsedSeconds;
             document.getElementById("cps").innerHTML = "[CPS] Clicks/s: " + cps.toFixed(2);
+
+            if (autoclickDetected) {
+                document.getElementById("cps").style.color = "red";
+            } else {
+                document.getElementById("cps").style.color = "black";
+            }
         }
 
         setInterval(updateCPS, 100);
@@ -39,8 +66,16 @@
             clickCount = 0;
             startTime = Date.now();
             cps = 0;
+            lastClickTime = Date.now();
+            autoclickDetected = false;
             document.getElementById("count").innerHTML = clickCount;
             document.getElementById("cps").innerHTML = "[CPS] Clicks/s: " + cps.toFixed(2);
+            document.getElementById("cps").style.color = "black";
+        }
+        
+        // Function to show the changelog
+        function showChangelog() {
+            alert("This is the changelog:\n- Version 1.0: Initial release\n- Version 1.1: Bug fixes");
         }
     </script>
 </body>
