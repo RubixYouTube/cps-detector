@@ -23,7 +23,6 @@
         let startTime = Date.now();
         let cps = 0;
         let lastClickTime = Date.now();
-        let autoclickDetected = false;
         const timeThreshold = 100; // Time threshold for consecutive clicks (in milliseconds)
         const consecutiveClickThreshold = 5; // Number of consecutive clicks required to detect autoclick
 
@@ -34,13 +33,9 @@
             if (timeSinceLastClick < timeThreshold) {
                 clickCount++;
                 document.getElementById("count").innerHTML = clickCount;
-                if (clickCount % consecutiveClickThreshold === 0) {
-                    autoclickDetected = true;
-                }
             } else {
                 clickCount = 1;
                 document.getElementById("count").innerHTML = clickCount;
-                autoclickDetected = false;
             }
 
             lastClickTime = currentTime;
@@ -52,12 +47,6 @@
             let elapsedSeconds = elapsedMilliseconds / 1000;
             cps = clickCount / elapsedSeconds;
             document.getElementById("cps").innerHTML = "[CPS] Clicks/s: " + cps.toFixed(2);
-
-            if (autoclickDetected) {
-                document.getElementById("cps").style.color = "red";
-            } else {
-                document.getElementById("cps").style.color = "black";
-            }
         }
 
         setInterval(updateCPS, 100);
@@ -67,10 +56,8 @@
             startTime = Date.now();
             cps = 0;
             lastClickTime = Date.now();
-            autoclickDetected = false;
             document.getElementById("count").innerHTML = clickCount;
             document.getElementById("cps").innerHTML = "[CPS] Clicks/s: " + cps.toFixed(2);
-            document.getElementById("cps").style.color = "black";
         }
         
         // Function to show the changelog
