@@ -13,30 +13,46 @@
     <button onclick="countClicks()">Click Me</button>
     <h1 id="clickCount">You clicked the button <span id="count">0</span> times</h1>
     <h2 id="cps">[CPS] Clicks/s: 0</h2>
+    <p id="highestCPS">Highest CPS: 0</p>
     <button onclick="resetCounter()">Reset</button>
 
     <script>
         let clickCount = 0;
-        let startTime = Date.now();
+        let startTime = 0;
+        let highestCPS = 0;
 
         function countClicks() {
+            if (clickCount === 0) {
+                startTime = performance.now();
+                requestAnimationFrame(updateCPS);
+            }
             clickCount++;
             document.getElementById("count").innerHTML = clickCount;
-            updateCPS();
+
+            updateHighestCPS();
         }
 
-        function updateCPS() {
-            let currentTime = Date.now();
-            let elapsedSeconds = (currentTime - startTime) / 1000;
+        function updateCPS(timestamp) {
+            let elapsedSeconds = (timestamp - startTime) / 1000;
             let cps = clickCount / elapsedSeconds;
             document.getElementById("cps").innerHTML = "[CPS] Clicks/s: " + cps.toFixed(2);
+            requestAnimationFrame(updateCPS);
+        }
+
+        function updateHighestCPS() {
+            let currentCPS = clickCount / ((performance.now() - startTime) / 1000);
+            if (currentCPS > highestCPS) {
+                highestCPS = currentCPS;
+                document.getElementById("highestCPS").innerHTML = "Highest CPS: " + highestCPS.toFixed(2);
+            }
         }
 
         function resetCounter() {
             clickCount = 0;
-            startTime = Date.now();
+            startTime = 0;
             document.getElementById("count").innerHTML = clickCount;
             document.getElementById("cps").innerHTML = "[CPS] Clicks/s: 0";
+            document.getElementById("highestCPS").innerHTML = "Highest CPS: 0";
         }
     </script>
 </body>
