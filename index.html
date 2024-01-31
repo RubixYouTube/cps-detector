@@ -35,12 +35,20 @@
         function updateCPS(timestamp) {
             let elapsedSeconds = (timestamp - startTime) / 1000;
             let cps = clickCount / elapsedSeconds;
+
+            // Cap maximum CPS at 60
+            cps = Math.min(cps, 60);
+
             document.getElementById("cps").innerHTML = "[CPS] Clicks/s: " + cps.toFixed(2);
             requestAnimationFrame(updateCPS);
         }
 
         function updateHighestCPS() {
             let currentCPS = clickCount / ((performance.now() - startTime) / 1000);
+
+            // Cap maximum CPS at 60
+            currentCPS = Math.min(currentCPS, 60);
+
             if (currentCPS > highestCPS) {
                 highestCPS = currentCPS;
                 document.getElementById("highestCPS").innerHTML = "Highest CPS: " + highestCPS.toFixed(2);
